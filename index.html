@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کارینو | ابزارهای آنلاین</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">کارینو<span>.</span></div>
+  <div class="tagline">ابزارهای ساده، سریع و رایگان</div>
+</header>
+
+<main>
+  <section class="quick-tools">
+    <div class="section-title">
+      <span>⭐</span>
+      <div>
+        <h2>ابزارهای محبوب</h2>
+        <p>پرکاربردترین ابزارهای کارینو، سریع و بدون نصب.</p>
+      </div>
+    </div>
+    <div class="quick-grid">
+      <button class="quick-card" onclick="showTool('imageTool')"><span>🖼️</span><b>تغییر اندازه تصویر</b><small>Resize و فشرده‌سازی</small></button>
+      <button class="quick-card" onclick="showTool('textTool')"><span>📝</span><b>ابزار متن فارسی</b><small>شمارش کلمات و حروف</small></button>
+      <button class="quick-card" onclick="showTool('qrTool')"><span>🔳</span><b>ساخت QR Code</b><small>تبدیل متن و لینک به QR</small></button>
+      <button class="quick-card" onclick="showTool('pdfTool')"><span>📄</span><b>ابزار PDF</b><small>ادغام، حذف و مدیریت صفحات</small></button>
+    </div>
+  </section>
+
+  <section class="hero">
+    <h1>ابزارهای آنلاین کارینو</h1>
+    <p>ابزارهای کاربردی برای کارهای روزمره، بدون نصب نرم‌افزار.</p>
+    <input id="search" class="search" type="search" placeholder="🔎 جستجوی ابزار...">
+  </section>
+
+  <section class="tools" id="tools">
+    <article class="card" data-name="تغییر اندازه تصویر resize">
+      <div class="icon">🖼️</div>
+      <h2>تغییر اندازه تصویر</h2>
+      <p>عرض و ارتفاع تصویر را تغییر بده.</p>
+      <button onclick="showTool('imageTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="فشرده سازی تصویر compress">
+      <div class="icon">📦</div>
+      <h2>فشرده‌سازی تصویر</h2>
+      <p>حجم عکس را با انتخاب کیفیت کاهش بده.</p>
+      <button onclick="showTool('imageTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="ابزار متن شمارش کلمات حروف">
+      <div class="icon">📝</div>
+      <h2>ابزار متن فارسی</h2>
+      <p>شمارش کلمات، حروف و خطوط و پاک‌سازی متن.</p>
+      <button onclick="showTool('textTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="qr code کد qr لینک متن">
+      <div class="icon">🔳</div>
+      <h2>ساخت QR Code</h2>
+      <p>ساخت کد QR برای متن، لینک و اطلاعات دلخواه.</p>
+      <button onclick="showTool('qrTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="محاسبه درصد درصد افزایش کاهش درصدی">
+      <div class="icon">%</div>
+      <h2>محاسبه درصد</h2>
+      <p>محاسبه درصد، افزایش و کاهش درصدی و درصد تغییر.</p>
+      <button onclick="showTool('percentTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="تبدیل واحد واحد طول وزن دما حجم">
+      <div class="icon">↔️</div>
+      <h2>تبدیل واحد</h2>
+      <p>تبدیل سریع طول، وزن، دما و حجم.</p>
+      <button onclick="showTool('unitTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="pdf پی دی اف ادغام جدا کردن حذف صفحات عکس چرخاندن مرتب سازی">
+      <div class="icon">📄</div>
+      <h2>ابزار PDF</h2>
+      <p>ادغام، جداسازی، حذف، عکس به PDF و مدیریت صفحات.</p>
+      <button onclick="showTool('pdfTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="شمارش کلمات word counter">
+      <div class="icon">🔢</div>
+      <h2>شمارش کلمات</h2>
+      <p>تعداد کلمات و حروف متن را ببین.</p>
+      <button onclick="showTool('textTool')">باز کردن ابزار</button>
+    </article>
+  </section>
+
+  <section id="pdfTool" class="tool-panel hidden">
+    <div class="panel-head">
+      <button class="back" onclick="hideTools()">← بازگشت</button>
+      <h2>📄 ابزار PDF</h2>
+    </div>
+
+    <div class="pdf-tabs">
+      <button class="pdf-tab active" data-pdfmode="merge">🔗 ادغام PDF</button>
+      <button class="pdf-tab" data-pdfmode="split">✂️ جدا کردن صفحات</button>
+      <button class="pdf-tab" data-pdfmode="delete">🗑️ حذف صفحات</button>
+      <button class="pdf-tab" data-pdfmode="imagepdf">🖼️ عکس به PDF</button>
+      <button class="pdf-tab" data-pdfmode="rotate">🔄 چرخاندن صفحات</button>
+      <button class="pdf-tab" data-pdfmode="reorder">🔀 جابه‌جایی صفحات</button>
+    </div>
+
+    <div id="pdfMerge" class="pdf-box">
+      <h3>ادغام چند فایل PDF</h3>
+      <p class="pdf-help">چند فایل را انتخاب کن؛ ترتیب فایل‌ها همان ترتیب انتخاب/نمایش خواهد بود.</p>
+      <label class="file-label">انتخاب PDFها
+        <input id="mergeFiles" type="file" accept="application/pdf" multiple>
+      </label>
+      <div id="mergeList" class="pdf-list"></div>
+      <button id="mergeBtn" class="pdf-action" disabled>ادغام و دانلود PDF</button>
+    </div>
+
+    <div id="pdfSplit" class="pdf-box hidden">
+      <h3>جدا کردن صفحات</h3>
+      <p class="pdf-help">مثلاً برای صفحات ۲ تا ۵ بنویس: <b>2-5</b> یا برای چند صفحه: <b>1,3,7</b>.</p>
+      <label class="file-label">انتخاب PDF
+        <input id="splitFile" type="file" accept="application/pdf">
+      </label>
+      <div id="splitInfo" class="pdf-info"></div>
+      <label class="page-label">شماره صفحات
+        <input id="splitPages" class="page-input" type="text" placeholder="مثلاً 1-3 یا 1,4,7">
+      </label>
+      <button id="splitBtn" class="pdf-action" disabled>جدا کردن و دانلود</button>
+    </div>
+
+    <div id="pdfDelete" class="pdf-box hidden">
+      <h3>حذف صفحات از PDF</h3>
+      <p class="pdf-help">شماره صفحاتی که می‌خواهی حذف شوند را وارد کن؛ مثلاً <b>2,4-6</b>.</p>
+      <label class="file-label">انتخاب PDF
+        <input id="deleteFile" type="file" accept="application/pdf">
+      </label>
+      <div id="deleteInfo" class="pdf-info"></div>
+      <label class="page-label">صفحات برای حذف
+        <input id="deletePages" class="page-input" type="text" placeholder="مثلاً 2,4-6">
+      </label>
+      <button id="deleteBtn" class="pdf-action" disabled>حذف صفحات و دانلود</button>
+    </div>
+
+
+    <div id="pdfImagePdf" class="pdf-box hidden">
+      <h3>تبدیل عکس به PDF</h3>
+      <p class="pdf-help">یک یا چند عکس را انتخاب کن؛ هر عکس به یک صفحه از PDF تبدیل می‌شود.</p>
+      <label class="file-label">انتخاب عکس‌ها
+        <input id="imagePdfFiles" type="file" accept="image/*" multiple>
+      </label>
+      <div id="imagePdfList" class="pdf-list"></div>
+      <button id="imagePdfBtn" class="pdf-action" disabled>ساخت PDF و دانلود</button>
+    </div>
+
+    <div id="pdfRotate" class="pdf-box hidden">
+      <h3>چرخاندن صفحات PDF</h3>
+      <p class="pdf-help">صفحات را وارد کن؛ مثلاً <b>2,4-6</b>. سپس مقدار چرخش را انتخاب کن.</p>
+      <label class="file-label">انتخاب PDF
+        <input id="rotateFile" type="file" accept="application/pdf">
+      </label>
+      <div id="rotateInfo" class="pdf-info"></div>
+      <label class="page-label">صفحات برای چرخاندن
+        <input id="rotatePages" class="page-input" type="text" placeholder="مثلاً 1-3 یا 2,5">
+      </label>
+      <label class="page-label">مقدار چرخش
+        <select id="rotateAngle" class="page-input">
+          <option value="90">۹۰ درجه</option>
+          <option value="180">۱۸۰ درجه</option>
+          <option value="270">۲۷۰ درجه</option>
+        </select>
+      </label>
+      <button id="rotateBtn" class="pdf-action" disabled>چرخاندن و دانلود</button>
+    </div>
+
+    <div id="pdfReorder" class="pdf-box hidden">
+      <h3>جابه‌جایی ترتیب صفحات</h3>
+      <p class="pdf-help">ترتیب جدید را بنویس؛ مثلاً برای PDF پنج‌صفحه‌ای: <b>3,1,2,5,4</b>.</p>
+      <label class="file-label">انتخاب PDF
+        <input id="reorderFile" type="file" accept="application/pdf">
+      </label>
+      <div id="reorderInfo" class="pdf-info"></div>
+      <label class="page-label">ترتیب جدید صفحات
+        <input id="reorderPages" class="page-input" type="text" placeholder="مثلاً 3,1,2,5,4">
+      </label>
+      <button id="reorderBtn" class="pdf-action" disabled>مرتب‌سازی و دانلود</button>
+    </div>
+
+    <p id="pdfStatus" class="status"></p>
+    <p class="pdf-note">پردازش فایل‌ها در مرورگر انجام می‌شود. برای اجرای ابزار PDF، اتصال اینترنت برای بارگذاری کتابخانه PDF لازم است.</p>
+  </section>
+
+  <section id="unitTool" class="tool-panel hidden">
+    <div class="panel-head">
+      <button class="back" onclick="hideTools()">← بازگشت</button>
+      <h2>↔️ تبدیل واحد</h2>
+    </div>
+
+    <label class="qr-label">دسته‌بندی</label>
+    <div class="unit-tabs">
+      <button class="unit-tab active" data-type="length">📏 طول</button>
+      <button class="unit-tab" data-type="weight">⚖️ وزن</button>
+      <button class="unit-tab" data-type="temperature">🌡️ دما</button>
+      <button class="unit-tab" data-type="volume">🧪 حجم</button>
+    </div>
+
+    <div class="unit-grid">
+      <label>مقدار
+        <input id="unitValue" type="number" step="any" placeholder="مثلاً 10">
+      </label>
+      <label>از
+        <select id="unitFrom"></select>
+      </label>
+      <label>به
+        <select id="unitTo"></select>
+      </label>
+    </div>
+
+    <button id="convertUnit">تبدیل</button>
+    <div id="unitResult" class="result-box">نتیجه اینجا نمایش داده می‌شود.</div>
+  </section>
+
+  <section id="percentTool" class="tool-panel hidden">
+    <div class="panel-head">
+      <button class="back" onclick="hideTools()">← بازگشت</button>
+      <h2>% محاسبه درصد</h2>
+    </div>
+
+    <div class="percent-tabs">
+      <button class="percent-tab active" data-mode="part">چند درصدِ یک عدد؟</button>
+      <button class="percent-tab" data-mode="change">درصد تغییر</button>
+      <button class="percent-tab" data-mode="increase">افزایش درصدی</button>
+      <button class="percent-tab" data-mode="decrease">کاهش درصدی</button>
+    </div>
+
+    <div id="percentPart" class="percent-box">
+      <h3>درصدی از یک عدد</h3>
+      <div class="percent-grid">
+        <label>درصد
+          <input id="partPercent" type="number" step="any" placeholder="مثلاً 25">
+        </label>
+        <label>عدد
+          <input id="partNumber" type="number" step="any" placeholder="مثلاً 200">
+        </label>
+      </div>
+      <button id="calcPart">محاسبه</button>
+      <div id="partResult" class="result-box">نتیجه اینجا نمایش داده می‌شود.</div>
+    </div>
+
+    <div id="percentChange" class="percent-box hidden">
+      <h3>درصد تغییر از عدد اول به عدد دوم</h3>
+      <div class="percent-grid">
+        <label>عدد اول
+          <input id="oldNumber" type="number" step="any" placeholder="مثلاً 100">
+        </label>
+        <label>عدد دوم
+          <input id="newNumber" type="number" step="any" placeholder="مثلاً 125">
+        </label>
+      </div>
+      <button id="calcChange">محاسبه</button>
+      <div id="changeResult" class="result-box">نتیجه اینجا نمایش داده می‌شود.</div>
+    </div>
+
+    <div id="percentIncrease" class="percent-box hidden">
+      <h3>افزایش درصدی یک عدد</h3>
+      <div class="percent-grid">
+        <label>عدد
+          <input id="increaseNumber" type="number" step="any" placeholder="مثلاً 500">
+        </label>
+        <label>درصد افزایش
+          <input id="increasePercent" type="number" step="any" placeholder="مثلاً 20">
+        </label>
+      </div>
+      <button id="calcIncrease">محاسبه</button>
+      <div id="increaseResult" class="result-box">نتیجه اینجا نمایش داده می‌شود.</div>
+    </div>
+
+    <div id="percentDecrease" class="percent-box hidden">
+      <h3>کاهش درصدی یک عدد</h3>
+      <div class="percent-grid">
+        <label>عدد
+          <input id="decreaseNumber" type="number" step="any" placeholder="مثلاً 500">
+        </label>
+        <label>درصد کاهش
+          <input id="decreasePercent" type="number" step="any" placeholder="مثلاً 20">
+        </label>
+      </div>
+      <button id="calcDecrease">محاسبه</button>
+      <div id="decreaseResult" class="result-box">نتیجه اینجا نمایش داده می‌شود.</div>
+    </div>
+  </section>
+
+  <section id="qrTool" class="tool-panel hidden">
+    <div class="panel-head">
+      <button class="back" onclick="hideTools()">← بازگشت</button>
+      <h2>🔳 ساخت QR Code</h2>
+    </div>
+
+    <label class="qr-label">متن یا لینک موردنظر</label>
+    <textarea id="qrInput" class="qr-input" placeholder="مثلاً https://example.com یا یک متن دلخواه..."></textarea>
+
+    <div class="qr-options">
+      <label>اندازه
+        <select id="qrSize">
+          <option value="200">200 × 200</option>
+          <option value="300" selected>300 × 300</option>
+          <option value="400">400 × 400</option>
+          <option value="500">500 × 500</option>
+        </select>
+      </label>
+      <label>رنگ QR
+        <input id="qrDark" type="color" value="#000000">
+      </label>
+      <label>رنگ پس‌زمینه
+        <input id="qrLight" type="color" value="#ffffff">
+      </label>
+    </div>
+
+    <div class="qr-preview">
+      <div id="qrPlaceholder">متن را وارد کن تا QR ساخته شود</div>
+      <img id="qrImage" class="hidden" alt="QR Code">
+    </div>
+
+    <div class="text-actions">
+      <button id="qrGenerate">ساخت QR Code</button>
+      <button id="qrDownload" class="hidden">⬇️ دانلود PNG</button>
+    </div>
+    <p id="qrStatus" class="status"></p>
+    <p class="qr-note">برای ساخت QR از سرویس آنلاین QRServer استفاده می‌شود؛ متن واردشده برای ساخت کد به این سرویس ارسال می‌شود.</p>
+  </section>
+
+  <section id="imageTool" class="tool-panel hidden">
+    <div class="panel-head">
+      <button class="back" onclick="hideTools()">← بازگشت</button>
+      <h2>🖼️ ابزار تصویر</h2>
+    </div>
+    <label class="file-label">انتخاب تصویر
+      <input id="imgInput" type="file" accept="image/*">
+    </label>
+    <div id="imgArea" class="hidden">
+      <div class="preview-wrap"><img id="preview" alt="پیش‌نمایش"></div>
+      <div class="controls">
+        <label>عرض <input id="width" type="number" min="1"></label>
+        <label>ارتفاع <input id="height" type="number" min="1"></label>
+        <label class="check"><input id="ratio" type="checkbox" checked> حفظ نسبت تصویر</label>
+        <label>کیفیت: <span id="qualityValue">85%</span>
+          <input id="quality" type="range" min="10" max="100" value="85">
+        </label>
+        <button id="processBtn">ساخت و دانلود تصویر</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="textTool" class="tool-panel hidden">
+    <div class="panel-head">
+      <button class="back" onclick="hideTools()">← بازگشت</button>
+      <h2>📝 ابزار متن فارسی</h2>
+    </div>
+
+    <textarea id="textInput" placeholder="متن خود را اینجا وارد کنید..."></textarea>
+
+    <div class="stats">
+      <div><b id="wordCount">۰</b><span>کلمه</span></div>
+      <div><b id="charCount">۰</b><span>حرف با فاصله</span></div>
+      <div><b id="charNoSpace">۰</b><span>حرف بدون فاصله</span></div>
+      <div><b id="lineCount">۰</b><span>خط</span></div>
+    </div>
+
+    <div class="text-actions">
+      <button id="copyBtn">📋 کپی متن</button>
+      <button id="cleanBtn">✨ حذف فاصله‌های اضافی</button>
+      <button id="clearBtn" class="danger">🗑️ پاک کردن</button>
+    </div>
+    <p id="copyStatus" class="status"></p>
+  </section>
+</main>
+
+<footer><div class="footer-brand">کارینو</div><div>© 2026 Karino — ساخته شده توسط Matin Ahmadi</div><div class="footer-note">ابزارهای ساده، سریع و کاربردی برای کارهای روزمره.</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
