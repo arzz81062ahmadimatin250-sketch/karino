@@ -13,6 +13,12 @@
 <body>
 <header>
   <div class="brand">کارینو<span>.</span></div>
+  <nav class="main-nav" aria-label="ناوبری اصلی">
+    <a href="index.html">خانه</a>
+    <a href="guide.html">راهنما</a>
+    <a href="about.html">درباره</a>
+    <a href="faq.html">سؤالات متداول</a>
+  </nav>
   <div class="tagline">ابزارهای ساده، سریع و رایگان</div>
 </header>
 
@@ -31,6 +37,8 @@
       <button class="quick-card" onclick="showTool('textTool')"><span>📝</span><b>ابزار متن فارسی</b><small>شمارش کلمات و حروف</small></button>
       <button class="quick-card" onclick="showTool('qrTool')"><span>🔳</span><b>ساخت QR Code</b><small>تبدیل متن و لینک به QR</small></button>
       <button class="quick-card" onclick="showTool('pdfTool')"><span>📄</span><b>ابزار PDF</b><small>ادغام، حذف و مدیریت صفحات</small></button>
+      <button class="quick-card" onclick="showTool('calculatorTool')"><span>🧮</span><b>ماشین‌حساب</b><small>محاسبات سریع روزمره</small></button>
+      <button class="quick-card" onclick="showTool('jsonTool')"><span>{ }</span><b>فرمت‌کننده JSON</b><small>مرتب‌سازی و فشرده‌سازی</small></button>
     </div>
   </section>
 
@@ -98,6 +106,27 @@
       <h2>شمارش کلمات</h2>
       <p>تعداد کلمات و حروف متن را ببین.</p>
       <button onclick="showTool('textTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="ماشین حساب calculator جمع تفریق ضرب تقسیم">
+      <div class="icon">🧮</div>
+      <h2>ماشین‌حساب</h2>
+      <p>محاسبات چهار عمل اصلی و عبارت‌های ساده.</p>
+      <button onclick="showTool('calculatorTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="json formatter json فرمت فشرده سازی مرتب سازی">
+      <div class="icon">{ }</div>
+      <h2>فرمت‌کننده JSON</h2>
+      <p>JSON را مرتب، زیبا یا فشرده کن و خطاها را ببین.</p>
+      <button onclick="showTool('jsonTool')">باز کردن ابزار</button>
+    </article>
+
+    <article class="card" data-name="رنگ color hex rgb رنگ">
+      <div class="icon">🎨</div>
+      <h2>ابزار رنگ</h2>
+      <p>کد HEX و RGB رنگ دلخواه را پیدا کن.</p>
+      <button onclick="showTool('colorTool')">باز کردن ابزار</button>
     </article>
   </section>
 
@@ -356,7 +385,13 @@
         <label>کیفیت: <span id="qualityValue">85%</span>
           <input id="quality" type="range" min="10" max="100" value="85">
         </label>
-        <button id="processBtn">ساخت و دانلود تصویر</button>
+        <label>فرمت خروجی
+          <select id="imageFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select>
+        </label>
+        <label>چرخش
+          <select id="imageRotation"><option value="0">بدون چرخش</option><option value="90">۹۰ درجه</option><option value="180">۱۸۰ درجه</option><option value="270">۲۷۰ درجه</option></select>
+        </label>
+        <button id="processBtn">ساخت و دانلود تصویر</button><p id="imgStatus" class="status"></p>
       </div>
     </div>
   </section>
@@ -383,9 +418,43 @@
     </div>
     <p id="copyStatus" class="status"></p>
   </section>
+  <section id="calculatorTool" class="tool-panel hidden">
+    <div class="panel-head"><button class="back" onclick="hideTools()">← بازگشت</button><h2>🧮 ماشین‌حساب</h2></div>
+    <div class="calc-wrap">
+      <input id="calcDisplay" class="calc-display" type="text" inputmode="decimal" placeholder="0" aria-label="نمایشگر ماشین حساب">
+      <div class="calc-grid">
+        <button data-calc="clear">AC</button><button data-calc="back">⌫</button><button data-calc="%">%</button><button data-calc="/">÷</button>
+        <button data-calc="7">۷</button><button data-calc="8">۸</button><button data-calc="9">۹</button><button data-calc="*">×</button>
+        <button data-calc="4">۴</button><button data-calc="5">۵</button><button data-calc="6">۶</button><button data-calc="-">−</button>
+        <button data-calc="1">۱</button><button data-calc="2">۲</button><button data-calc="3">۳</button><button data-calc="+">+</button>
+        <button data-calc="0" class="wide">۰</button><button data-calc=".">.</button><button data-calc="=">=</button>
+      </div>
+    </div>
+    <p class="tool-note">محاسبات در خود مرورگر انجام می‌شوند.</p>
+  </section>
+
+  <section id="jsonTool" class="tool-panel hidden">
+    <div class="panel-head"><button class="back" onclick="hideTools()">← بازگشت</button><h2>{ } فرمت‌کننده JSON</h2></div>
+    <textarea id="jsonInput" class="qr-input" placeholder='مثلاً {"name":"Karino","tools":8}'></textarea>
+    <div class="text-actions json-actions"><button id="jsonFormat">✨ مرتب‌سازی</button><button id="jsonMinify">⚡ فشرده‌سازی</button><button id="jsonCopy">📋 کپی</button><button id="jsonClear" class="danger">🗑️ پاک کردن</button></div>
+    <p id="jsonStatus" class="status"></p>
+  </section>
+
+  <section id="colorTool" class="tool-panel hidden">
+    <div class="panel-head"><button class="back" onclick="hideTools()">← بازگشت</button><h2>🎨 ابزار رنگ</h2></div>
+    <div class="color-box">
+      <input id="colorPicker" type="color" value="#7c5cff" aria-label="انتخاب رنگ">
+      <div id="colorPreview" class="color-preview"></div>
+      <label>HEX<input id="hexValue" class="page-input" value="#7C5CFF" maxlength="7"></label>
+      <label>RGB<input id="rgbValue" class="page-input" readonly></label>
+      <button id="copyColor">📋 کپی HEX</button>
+    </div>
+    <p id="colorStatus" class="status"></p>
+  </section>
+
 </main>
 
-<footer><div class="footer-brand">کارینو</div><div>© 2026 Karino — ساخته شده توسط Matin Ahmadi</div><div class="footer-note">ابزارهای ساده، سریع و کاربردی برای کارهای روزمره.</div></footer>
+<footer><div class="footer-brand">کارینو</div><div>© 2026 Karino — ساخته شده توسط Matin Ahmadi</div><div class="footer-links"><a href="guide.html">راهنما</a><a href="about.html">درباره کارینو</a><a href="privacy.html">حریم خصوصی</a><a href="faq.html">سؤالات متداول</a></div><div class="footer-note">ابزارهای ساده، سریع و کاربردی برای کارهای روزمره.</div></footer>
 <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script src="script.js"></script>
 </body>

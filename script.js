@@ -1,5 +1,6 @@
 const $ = id => document.getElementById(id);
 const cards = [...document.querySelectorAll('.card')];
+const quickCards = [...document.querySelectorAll('.quick-card')];
 
 function showTool(id){
   document.querySelector('.hero').classList.add('hidden');
@@ -41,15 +42,25 @@ $('processBtn').addEventListener('click',()=>{
   const file=$('imgInput').files[0]; if(!file)return;
   const img=new Image();
   img.onload=()=>{
+    const w=+$('width').value, h=+$('height').value;
+    const angle=Number($('imageRotation').value||0);
+    const swap=angle===90||angle===270;
     const canvas=document.createElement('canvas');
-    canvas.width=+$('width').value; canvas.height=+$('height').value;
-    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+    canvas.width=swap?h:w; canvas.height=swap?w:h;
+    const ctx=canvas.getContext('2d');
+    ctx.translate(canvas.width/2,canvas.height/2);
+    ctx.rotate(angle*Math.PI/180);
+    ctx.drawImage(img,-w/2,-h/2,w,h);
+    const type=$('imageFormat').value;
     canvas.toBlob(blob=>{
+      if(!blob){$('imgStatus').textContent='ساخت تصویر انجام نشد.';return;}
       const a=document.createElement('a');
       a.href=URL.createObjectURL(blob);
-      a.download='karino-image.jpg'; a.click();
-      URL.revokeObjectURL(a.href);
-    },'image/jpeg',+$('quality').value/100);
+      const ext=type==='image/png'?'png':type==='image/webp'?'webp':'jpg';
+      a.download='karino-image.'+ext; a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+      $('imgStatus').textContent='تصویر آماده شد ✓';
+    },type,+$('quality').value/100);
   };
   img.src=URL.createObjectURL(file);
 });
@@ -432,3 +443,80 @@ $('reorderBtn').addEventListener('click',async()=>{
     $('pdfStatus').textContent='ترتیب صفحات با موفقیت تغییر کرد ✓';
   }catch{$('pdfStatus').textContent='جابه‌جایی صفحات انجام نشد.';}
 });
+
+
+// Final pack: calculator
+const calcDisplay = $('calcDisplay');
+let calcExpr = '';
+function renderCalc(){ if(calcDisplay) calcDisplay.value = calcExpr.replace(/\*/g,'×').replace(/\//g,'÷'); }
+function safeCalculate(expr){
+  if(!/^[0-9+\-*/%.()\s]+$/.test(expr)) throw new Error('invalid');
+  const normalized=expr.replace(/%/g,'/100');
+  return Function('"use strict"; return ('+normalized+')')();
+}
+if(calcDisplay){
+  document.querySelectorAll('[data-calc]').forEach(btn=>btn.addEventListener('click',()=>{
+    const v=btn.dataset.calc;
+    if(v==='clear'){calcExpr='';}
+    else if(v==='back'){calcExpr=calcExpr.slice(0,-1);}
+    else if(v==='='){
+      try{const result=safeCalculate(calcExpr); calcExpr=Number.isFinite(result)?String(Number(result.toFixed(10))):'';}
+      catch{calcDisplay.value='عبارت نامعتبر'; setTimeout(renderCalc,1000); return;}
+    }else{
+      if(calcExpr.length<80) calcExpr += v;
+    }
+    renderCalc();
+  }));
+  calcDisplay.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){e.preventDefault();try{calcExpr=String(safeCalculate(calcDisplay.value));renderCalc()}catch{calcDisplay.value='عبارت نامعتبر'}}
+  });
+}
+
+// Final pack: JSON formatter
+if($('jsonInput')){
+  $('jsonFormat').addEventListener('click',()=>jsonTransform(2));
+  $('jsonMinify').addEventListener('click',()=>jsonTransform(0));
+  $('jsonCopy').addEventListener('click',async()=>{
+    if(!$('jsonInput').value)return;
+    try{await navigator.clipboard.writeText($('jsonInput').value);$('jsonStatus').textContent='JSON کپی شد ✓';setTimeout(()=>$('jsonStatus').textContent='',1500)}catch{$('jsonStatus').textContent='کپی خودکار در دسترس نیست.'}
+  });
+  $('jsonClear').addEventListener('click',()=>{$('jsonInput').value='';$('jsonStatus').textContent='';});
+}
+function jsonTransform(space){
+  const raw=$('jsonInput').value.trim(); if(!raw){$('jsonStatus').textContent='اول JSON را وارد کن.';return;}
+  try{$('jsonInput').value=JSON.stringify(JSON.parse(raw),null,space);$('jsonStatus').textContent=space?'JSON مرتب و معتبر شد ✓':'JSON فشرده شد ✓';}
+  catch(e){$('jsonStatus').textContent='JSON نامعتبر است؛ ساختار و علامت‌های نقل‌قول را بررسی کن.';}
+}
+
+// Final pack: color tool
+function hexToRgb(hex){
+  let h=hex.trim().replace('#','');
+  if(h.length===3) h=h.split('').map(x=>x+x).join('');
+  if(!/^[0-9a-fA-F]{6}$/.test(h)) return null;
+  return {r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16),hex:'#'+h.toUpperCase()};
+}
+function updateColor(hex){
+  const c=hexToRgb(hex); if(!c){$('colorStatus').textContent='کد HEX نامعتبر است.';return;}
+  $('colorPicker').value=c.hex; $('hexValue').value=c.hex; $('rgbValue').value=`rgb(${c.r}, ${c.g}, ${c.b})`; $('colorPreview').style.background=c.hex; $('colorStatus').textContent='';
+}
+if($('colorPicker')){
+  $('colorPicker').addEventListener('input',e=>updateColor(e.target.value));
+  $('hexValue').addEventListener('input',e=>updateColor(e.target.value));
+  $('copyColor').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('hexValue').value);$('colorStatus').textContent='کد رنگ کپی شد ✓';setTimeout(()=>$('colorStatus').textContent='',1500)}catch{}});
+  updateColor($('colorPicker').value);
+}
+
+// Normalize Persian text + extra text actions via keyboard shortcuts
+const textTool = $('textInput');
+if(textTool){
+  const normalizeBtn=document.createElement('button'); normalizeBtn.textContent='🧹 یکسان‌سازی حروف فارسی'; normalizeBtn.type='button'; normalizeBtn.id='normalizeBtn';
+  normalizeBtn.addEventListener('click',()=>{textTool.value=textTool.value.replace(/[يى]/g,'ی').replace(/ك/g,'ک').replace(/[٠-٩]/g,d=>String.fromCharCode(d.charCodeAt(0)-1632+48)).replace(/[۰-۹]/g,d=>String.fromCharCode(d.charCodeAt(0)-1776+48));updateStats();});
+  document.querySelector('#textTool .text-actions').prepend(normalizeBtn);
+}
+
+// Recent tools stored locally, without sending data anywhere.
+function rememberTool(id){
+  try{let list=JSON.parse(localStorage.getItem('karinoRecentTools')||'[]');list=[id,...list.filter(x=>x!==id)].slice(0,5);localStorage.setItem('karinoRecentTools',JSON.stringify(list));}catch{}
+}
+const originalShowTool=showTool;
+showTool=function(id){rememberTool(id);originalShowTool(id);};
